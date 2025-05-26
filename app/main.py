@@ -1,4 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from .agents.tutor_agent import tutor_agent
 
@@ -8,11 +11,27 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Mount static files
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+# Templates
+templates = Jinja2Templates(directory="app/templates")
+
 class Question(BaseModel):
     question: str
 
 class Answer(BaseModel):
     answer: str
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    """
+    Render the main page
+    """
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request, "app_name": "AI Tutoring Bot"}
+    )
 
 @app.post("/ask", response_model=Answer)
 async def ask_question(question: Question):
