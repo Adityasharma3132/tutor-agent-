@@ -55,6 +55,7 @@ A multi-agent system that uses the Gemini API to provide tutoring assistance in 
 
 ## Starting the Application
 
+### Local Development
 1. Start the application:
    ```bash
    uvicorn app.main:app --reload
@@ -64,16 +65,32 @@ A multi-agent system that uses the Gemini API to provide tutoring assistance in 
    - Web Interface: [http://localhost:8000](http://localhost:8000)
    - API Documentation: [http://localhost:8000/docs](http://localhost:8000/docs)
 
+### Railway Deployment
+
+1. Fork/Push your code to GitHub
+
+2. Create a new project on [Railway](https://railway.app/)
+
+3. Connect your GitHub repository
+
+4. Add the following environment variable in Railway:
+   - `GEMINI_API_KEY`: Your Gemini API key
+
+5. Railway will automatically detect the Procfile and deploy your application
+
+6. Your application will be available at the URL provided by Railway
+
 ## Usage
 
 1. Through the Web Interface:
-   - Visit http://localhost:8000
+   - Visit http://localhost:8000 (or your Railway URL)
    - Type your math or physics question in the text area
    - Click "Ask Question" or try one of the example questions
 
 2. Through the API:
    ```bash
-   curl -X POST "http://localhost:8000/ask" \
+   # Replace {YOUR_APP_URL} with localhost:8000 or your Railway URL
+   curl -X POST "{YOUR_APP_URL}/ask" \
         -H "Content-Type: application/json" \
         -d '{"question": "What is the speed of light?"}'
    ```
@@ -105,6 +122,7 @@ A multi-agent system that uses the Gemini API to provide tutoring assistance in 
 │   └── main.py
 ├── .env.example
 ├── .gitignore
+├── Procfile
 ├── requirements.txt
 └── README.md
 ```
@@ -131,4 +149,9 @@ A multi-agent system that uses the Gemini API to provide tutoring assistance in 
 3. If the server won't start:
    - Verify all dependencies are installed
    - Check if another process is using port 8000
-   - Ensure Python 3.8 or higher is installed 
+   - Ensure Python 3.8 or higher is installed
+
+4. Railway Deployment Issues:
+   - Ensure Procfile exists in the root directory
+   - Check if GEMINI_API_KEY is set in Railway environment variables
+   - Verify the application logs in Railway dashboard for specific errors 
